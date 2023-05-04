@@ -2,8 +2,6 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
-	"log"
 	"maraka/auth"
 	"maraka/booking"
 	"maraka/db"
@@ -11,9 +9,9 @@ import (
 )
 
 func main() {
-	if godotenv.Load(".env") != nil {
-		log.Fatalf("Error loading .env file")
-	}
+	//if godotenv.Load(".env") != nil {
+	//	log.Fatalf("Error loading .env file")
+	//}
 	router := gin.Default()
 
 	db.Init(os.Getenv("DB_URL"))
