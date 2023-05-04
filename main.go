@@ -10,11 +10,6 @@ import (
 	"os"
 )
 
-func GetVariable(key string) string {
-
-	return os.Getenv(key)
-}
-
 func main() {
 	if godotenv.Load(".env") != nil {
 		log.Fatalf("Error loading .env file")
