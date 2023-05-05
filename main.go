@@ -25,7 +25,6 @@ func main() {
 	public.POST("/login", auth.Login)
 
 	private := router.Group("booking")
-	// private.Use(auth.Authenticate())
 
 	private.POST("", booking.NewBook)
 	private.GET("", booking.GetBooks)

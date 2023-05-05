@@ -2,7 +2,10 @@ package booking
 
 import (
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"maraka/auth"
+	"maraka/db"
 	"net/http"
 )
 
@@ -12,13 +15,18 @@ func GetBookById(c *gin.Context) {
 		return
 	}
 
-	id := c.Param("id")
-
-	for _, a := range books {
-		if a.ID == id {
-			c.IndentedJSON(http.StatusOK, a)
-			return
-		}
+	id, err := primitive.ObjectIDFromHex(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "booking not found"})
+
+	var result bson.M
+	err = db.BookingCollection.FindOne(db.Ctx, bson.D{{"_id", id}}).Decode(&result)
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, result)
 }

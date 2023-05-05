@@ -7,5 +7,5 @@ WORKDIR /app
 ARG DEFAULT_PORT=8080
 EXPOSE 8080
 
-RUN go build *.go  # -o app maraka-api .
+RUN go build *.go
 CMD ["/app/main"]
