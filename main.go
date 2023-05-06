@@ -8,6 +8,7 @@ import (
 	"maraka/auth"
 	"maraka/booking"
 	"maraka/db"
+	"maraka/users"
 	"os"
 	"time"
 )
@@ -52,6 +53,8 @@ func main() {
 	private.POST("", booking.NewBook)
 	private.GET("", booking.GetBooks)
 	private.GET("/:id", booking.GetBookById)
+
+	router.GET("/users/:id", users.GetUserMe)
 
 	router.Run(":8080")
 }
