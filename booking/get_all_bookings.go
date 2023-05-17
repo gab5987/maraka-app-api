@@ -6,6 +6,7 @@ import (
 	"maraka/auth"
 	"maraka/db"
 	"net/http"
+	"strconv"
 )
 
 func GetBooks(c *gin.Context) {
@@ -18,7 +19,15 @@ func GetBooks(c *gin.Context) {
 
 	var books []Booking
 
-	cursor, err := db.BookingCollection.Find(db.Ctx, bson.D{}, &paginateOptions)
+	var query = bson.D{}
+	_room, hasKey := c.GetQuery("room")
+
+	if hasKey {
+		room, _ := strconv.ParseInt(_room, 10, 64)
+		query = bson.D{{"room", room}}
+	}
+
+	cursor, err := db.BookingCollection.Find(db.Ctx, query, &paginateOptions)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -34,7 +43,7 @@ func GetBooks(c *gin.Context) {
 		books = append(books, elem)
 	}
 
-	count, _ := db.BookingCollection.CountDocuments(db.Ctx, bson.D{})
+	count, _ := db.BookingCollection.CountDocuments(db.Ctx, query)
 
 	c.IndentedJSON(http.StatusOK, gin.H{
 		"data":      books,
