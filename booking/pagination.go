@@ -2,6 +2,7 @@ package booking
 
 import (
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"strconv"
 )
@@ -29,8 +30,11 @@ func Paginate(c *gin.Context) options.FindOptions {
 		paginate.Page = int64(pg)
 	}
 
-	skip := int64(paginate.Page*paginate.Limit - paginate.Limit)
-	fOpt := options.FindOptions{Limit: &paginate.Limit, Skip: &skip}
+	fOpt := options.FindOptions{}
+
+	fOpt.SetSort(bson.D{{"startDate", -1}})
+	fOpt.SetLimit(paginate.Limit)
+	fOpt.SetSkip(paginate.Page*paginate.Limit - paginate.Limit)
 
 	return fOpt
 }

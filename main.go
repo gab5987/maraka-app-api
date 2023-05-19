@@ -53,6 +53,7 @@ func main() {
 	private.POST("", booking.NewBook)
 	private.GET("", booking.GetBooks)
 	private.GET("/:id", booking.GetBookById)
+	private.DELETE("/:id", booking.DeleteOneBooking)
 
 	router.GET("/users/:id", users.GetUserMe)
 
